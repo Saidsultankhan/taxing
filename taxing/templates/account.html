@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block link %}
+  <link rel="stylesheet" href="{% static 'mainapp/css/account.css' %}">
+{% endblock link %}
+
+{% block content %}
+
+  <div class="container-fluid" style="margin-bottom: 2%">
+      <div class="row">
+        <div class="col-4 card" style="margin-top: 5%; padding-top: 5%">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Собственник: {{ user.username }}</li>
+            {% if user.company.name %}
+            <li class="list-group-item">Название компании: {{ user.company.name }}</li>
+            {% endif %}
+            {% if user.company.has_fine is False %}
+              <li class="list-group-item">Штрафы: Нет</li>
+            {% else %}
+              <li class="list-group-item">Штрафы: Есть</li>
+            {% endif %}
+            {% if has_paid %}
+            <li class="list-group-item">Пеня: {{ has_paid }}</li>
+            {% endif %}
+            <li class="list-group-item">Оборот в национальной валюте: {{ total }} сумм </li>
+            <li class="list-group-item">Оборот у.е: {{ tax_in_dollar }} $</li>
+            <li class="list-group-item">Тип Юр.лица: {{ company.type_of_company }}</li>
+            <li class="list-group-item">Процентная ставка: {{company.type_of_company.name.amount}} % </li>
+
+            <li class="add list-group-item" style="display: flex; justify-content: end">
+                <a href="{% url 'mainapp:tax_add' %}" style="text-decoration: none; color: black;">Добавить налог</a>
+            </li>
+          </ul>
+        </div>
+          <div class="col-8 card" style="margin-top: 5%; padding: 0">
+            {% if taxes != 0 %}
+              <div class="list-group" id="curve_chart" style="width: 100%; height: 500px"></div>
+            {% else %}
+              <p style="margin-top: 25%; margin-left: 25%">Статистика отсутствует из-за отсутствия оборота компании!</p>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-bottom: 12%">
+      <div class="col-4">
+        <table class="list-group-item list-group-flush">
+          <h5>Оборот компании за 2021 год</h5>
+          <ul>
+            <li class="list-group-item">Оборот за 1-ый квартал - <span id="first_sqrt_2021">{{first_sqrt_2021}} сумм</span></li>
+            <li class="list-group-item">Оборот за 2-ой квартал - <span id="second_sqrt_2021">{{second_sqrt_2021}} сумм</span></li>
+            <li class="list-group-item">Оборот за 3-ий квартал - <span id="third_sqrt_2021">{{third_sqrt_2021}} сумм</span></li>
+            <li class="list-group-item">Оборот за 4-ый квартал - <span id="firth_sqrt_2021">{{firth_sqrt_2021}} сумм</span></li>
+          </ul>
+          <h5>Оборот компании за 2022 год</h5>
+          <ul>
+            <li class="list-group-item">Оборот за 1-ый квартал - <span id="first_sqrt_2022">{{first_sqrt_2022}} сумм</span></li>
+            <li class="list-group-item">Оборот за 2-ой квартал - <span id="second_sqrt_2022">{{second_sqrt_2022}} сумм</span></li>
+            <li class="list-group-item">Оборот за 3-ий квартал - <span id="third_sqrt_2022">{{third_sqrt_2022}} сумм</span></li>
+            <li class="list-group-item">Оборот за 4-ый квартал - <span id="firth_sqrt_2022">{{firth_sqrt_2022}} сумм</span></li>
+          </ul>
+        </table>
+      </div>
+      <div class="col-6 offset-lg-1">
+        <div>
+          <h5>Статистика в цифрах</h5>
+        </div>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">Время</th>
+                <th scope="col">Сумма в сумах</th>
+                <th scope="col">Год</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for i in taxs %}
+              <tr>
+                <td>{{i.time}}</td>
+                <td id="twenty_1">{{i.tax}}</td>
+                <td>{{i.year}}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+          <script type="text/javascript">
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+              var twenty_1 =  parseInt(document.querySelector('#first_sqrt_2021').textContent);
+              var twenty_2 =  parseInt(document.querySelector('#second_sqrt_2021').textContent);
+              var twenty_3 =  parseInt(document.querySelector('#third_sqrt_2021').textContent);
+              var twenty_4 =  parseInt(document.querySelector('#firth_sqrt_2021').textContent);
+              var twenty_5 =  parseInt(document.querySelector('#first_sqrt_2022').textContent);
+              var twenty_6 =  parseInt(document.querySelector('#second_sqrt_2022').textContent);
+              var twenty_7 =  parseInt(document.querySelector('#third_sqrt_2022').textContent);
+              var twenty_8 =  parseInt(document.querySelector('#firth_sqrt_2022').textContent);
+              var data = google.visualization.arrayToDataTable([
+                ['','2022', '2021'],
+                ['1.0', twenty_5,twenty_1],
+                ['2.0', twenty_6,twenty_2],
+                ['3.0', twenty_7,twenty_3],
+                ['4.0', twenty_8,twenty_4],
+              ]);
+
+              var options = {
+                title: 'Оборот компании в национальной валюте',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+              };
+
+              var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+              chart.draw(data, options);
+            }
+          </script>
+
+{% endblock content %}

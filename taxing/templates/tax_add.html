@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block link %}
+
+{% endblock link %}
+
+
+{% block content %}
+<div class="content container-fluid" style="margin-top: 15%; margin-bottom: 16%">
+      <div class="row">
+        <div class="left col-4 offset-lg-4">
+            {% if tax %}
+                <h3>
+                    Результат вычислений
+                </h3>
+                <hr>
+                <p>
+                    Сумма оборота: {{taxss}} сумм
+                </p>
+                <p>
+                   Сумма налога: {{tax}} сумм
+                </p>
+                <p>
+                    {{pay_month}}
+                </p>
+                <hr>
+                <button class="btn btn-light">
+                    <a href="{{ company.get_absolute_url }}">Назад</a>
+                </button>
+            {% else %}
+                <h2>Расчитать налог</h2>
+                <hr>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <hr>
+                    <button type="submit" class="btn btn-light">
+                        Расчитать
+                    </button>
+            {% endif %}
+            </form>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

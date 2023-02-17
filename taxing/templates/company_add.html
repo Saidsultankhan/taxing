@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if request.user.company %}
+<div class="context container-fluid" >
+{% else %}
+    <div class="context container-fluid" style="margin-bottom: 18%; margin-top: 5%">
+{% endif %}
+      <div class="row">
+        <div class="left col-4 offset-lg-4" style="margin-top: 10%;">
+            <h3>Добавить компанию</h3>
+            <hr>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <hr>
+                <button type="submit" class="btn btn-light">
+                    Create
+                </button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

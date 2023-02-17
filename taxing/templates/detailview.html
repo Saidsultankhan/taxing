@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/mainpage.css' %}">
+{% block link %}
+{% endblock link %}
+<div class="container-fluid" style="margin-top: 10%; margin-bottom: 2%">
+    <div class="row">
+        <div class="col-12 offset-lg-5">
+            Данные пользователя
+        </div>
+    </div>
+</div>
+{% if request.user.company %}
+<div class="container-fluid">
+    <div class="row" style="padding-top: 2%; margin-bottom: 19%;">
+{% else %}
+    <div class="row" style="padding-top: 2%; margin-bottom: 19%;">
+        {% endif %}
+        <div class="col-3 offset-lg-3">
+            <div class="img-fluid">
+                {% if user.photo %}
+                <img class="img-fluid" src="{{ user.photo.url }}" alt="">
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-6 card"style="padding-top: 2%">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span>Имя пользователя: {{ user.username }} </span></li>
+                <li class="list-group-item"><span>Фамилия: {{ user.first_name }} </span></li>
+                <li class="list-group-item"><span>Имя: {{ user.last_name }} </span></li>
+                {% if user_s.company %}
+                <li class="list-group-item">Компании:
+                    <a href="{{ user_s.company.get_absolute_url }}" style="text-decoration: none; color: black">
+                        {{ user_s.company }}
+                    </a>
+                </li>
+                {% else %}
+                <li class="list-group-item">
+                    <a href="{% url 'mainapp:company_add' %}">
+                        Добавить компанию
+                    </a>
+                </li>
+                {% endif %}
+                <li class="list-group-item"><span>Возраст: {% if user.age %} {{user.age}}{% else %} не указан... {% endif %}</span></li>
+                <li class="list-group-item">
+                    <a href="{% url 'customusers:update_user' user.pk %}" style="text-decoration: underline; color: black">
+                        Изменить данные
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-6 offset-lg-3">
+
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

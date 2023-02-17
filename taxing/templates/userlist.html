@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid offset-lg-3" style="margin-top: 10%; margin-bottom: 20%">
+  <div class="row">
+    <div class="col-5 card">
+      <ul style="padding-top: 4%">
+        {% for user in users %}
+        <span class="list-group-item">{{ user.username }}</span>
+        {% if user.photo.url %}
+          <img src="{{ user.photo.url }}" alt="ss">
+        {% endif %}
+        <span class="list-group-item">{{ user.age }}</span>
+        <span class="list-group-item"></span>
+        <span class="list-group-item"></span>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block link %}
+{% endblock link %}
+
+{% block content %}
+<div class="row">
+  <div class="left col-4 offset-lg-4" style="margin-top: 10%;">
+    <h2>Данные о налоге</h2>
+    <hr>
+      <ul>
+        <li>Налог за {{ tax.month }}</li>
+        <li>Сумма оборота {{tax.tax}}</li>
+        <li>Ваша % ставка</li>
+        <li>История юр лица</li>
+        <li></li>
+      </ul>
+    <hr>
+  </div>
+</div>
+{% endblock %}
